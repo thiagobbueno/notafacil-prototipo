@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NotaFácil – protótipo</title><style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif}
+body{background:#e2e8f0;display:flex;justify-content:center;min-height:100vh}
+#app{width:100%;max-width:430px;background:#fff;min-height:100vh;position:relative}
+.proto{background:#fbbf24;color:#422006;font-size:11px;font-weight:700;text-align:center;padding:4px}
+.top{background:#4f46e5;color:#fff;padding:18px 18px 16px}.top.dark{background:#0f172a}.top.ok{background:#16a34a}
+.brand{font-size:12px;opacity:.85;display:flex;justify-content:space-between}.brand a{color:#fff;text-decoration:none;cursor:pointer}
+.top h2{font-size:24px;margin-top:4px}.prog{display:flex;gap:6px;margin-top:10px}.prog i{flex:1;height:4px;border-radius:2px;background:#ffffff55}.prog i.on{background:#fff}
+.c{padding:16px}.scr{display:none}.scr.act{display:block}
+input{width:100%;border:none;background:#f1f5f9;border-radius:12px;padding:13px;font-size:15px;margin-bottom:12px;outline-color:#4f46e5}
+.cl{display:flex;align-items:center;gap:12px;padding:10px;border-radius:12px;border:1px solid #e2e8f0;margin-bottom:8px;cursor:pointer}.cl:active{background:#eef2ff}
+.av{width:40px;height:40px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.cl b{font-size:14px;display:block}.cl small{color:#64748b;font-size:12px}
+.new{border:2px dashed #a5b4fc;color:#4f46e5;border-radius:12px;padding:11px;text-align:center;font-weight:600;font-size:14px;margin:6px 0 12px;cursor:pointer;background:none;width:100%}
+.btn{display:block;width:100%;border:none;border-radius:14px;padding:15px;font-weight:700;font-size:16px;color:#fff;background:#4f46e5;margin-top:10px;cursor:pointer}
+.btn.green{background:#16a34a}.btn.dark{background:#0f172a}.btn.ghost{background:#f1f5f9;color:#334155}.btn:disabled{opacity:.4}
+.chip{background:#fef3c7;color:#92400e;border-radius:999px;padding:8px 12px;font-size:13px;font-weight:600;display:inline-block;margin-bottom:12px;cursor:pointer;border:none}
+.svc{border:1px solid #e2e8f0;border-radius:14px;padding:14px;margin-bottom:10px;cursor:pointer}.svc.sel{border:2px solid #4f46e5;background:#eef2ff}
+.svc b{font-size:15px}.svc p{font-size:12px;color:#64748b;margin-top:4px}.tags{margin-top:8px;display:flex;gap:6px}.tags span{font-size:11px;background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:4px 7px}
+.line{display:flex;justify-content:space-between;font-size:14px;padding:10px 0;border-bottom:1px solid #f1f5f9;gap:10px}.line span{color:#64748b}.line b{text-align:right}
+.lbl{font-size:12px;color:#64748b;font-weight:700;text-transform:uppercase;margin:12px 0 6px}
+.val{display:flex;align-items:center;border:2px solid #4f46e5;border-radius:12px;padding:4px 12px}.val span{font-size:24px;font-weight:800}.val input{font-size:26px;font-weight:800;background:none;margin:0;padding:8px}
+.tg{display:flex;justify-content:space-between;align-items:center;background:#f0fdf4;border-radius:12px;padding:12px;margin:14px 0 4px;font-size:14px;font-weight:600;cursor:pointer}
+.sw{width:46px;height:26px;background:#cbd5e1;border-radius:13px;position:relative;transition:.2s}.sw:after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.2s}.sw.on{background:#16a34a}.sw.on:after{left:23px}
+.rec{display:flex;flex-direction:column;align-items:center;margin:20px 0}
+.bigmic{width:96px;height:96px;border-radius:50%;background:#4f46e5;border:none;font-size:42px;cursor:pointer}.bigmic.live{background:#dc2626;animation:p 1s infinite}
+@keyframes p{0%{box-shadow:0 0 0 0 #dc262688}100%{box-shadow:0 0 0 26px #dc262600}}
+.rec small{color:#64748b;margin-top:14px}
+.tr{background:#f8fafc;border-left:4px solid #4f46e5;padding:12px;border-radius:8px;font-style:italic;font-size:14px;color:#334155;min-height:44px}
+.draft{border:1px solid #c7d2fe;border-radius:14px;padding:2px 14px;margin-top:8px}.ai{font-size:11px;background:#eef2ff;color:#4f46e5;padding:2px 6px;border-radius:6px;font-style:normal}
+.okic{font-size:64px;text-align:center;margin:24px 0 8px}.num{text-align:center;font-size:13px;color:#64748b}.num b{display:block;font-size:22px;color:#0f172a;margin-top:4px}
+.hint{font-size:12px;color:#64748b;margin-top:6px}.err{color:#dc2626}
+</style></head><body><div id="app">
+<div class="proto">PROTÓTIPO · dados fictícios · nenhuma nota real é emitida</div>
+
+<section class="scr act" id="s1"><div class="top"><div class="brand">NotaFácil</div><h2>Para quem?</h2><div class="prog"><i class="on"></i><i></i><i></i></div></div><div class="c">
+<input id="busca" placeholder="🔍 Buscar cliente ou CNPJ" oninput="renderClientes()">
+<div class="lbl">Frequentes</div><div id="lista"></div>
+<button class="new" id="bNovo" onclick="go('sNovo')">+ Novo cliente (só CNPJ)</button>
+<button class="btn" id="bRepetir" onclick="repetir()">↻ Repetir última nota</button>
+<button class="btn dark" id="bFalar" onclick="go('sVoz')">🎙️ Falar nota</button></div></section>
+
+<section class="scr" id="sNovo"><div class="top"><div class="brand"><span>NotaFácil</span><a onclick="go('s1')">✕ cancelar</a></div><h2>Novo cliente</h2></div><div class="c">
+<div class="lbl">CNPJ</div><input id="cnpj" inputmode="numeric" placeholder="00.000.000/0001-00" oninput="mascara(this)">
+<p class="hint">Só o CNPJ. O resto a gente preenche (no protótipo, com um nome fictício).</p>
+<div id="achado"></div><button class="btn" id="bBuscarCnpj" onclick="buscarCnpj()">Buscar dados</button></div></section>
+
+<section class="scr" id="s2"><div class="top"><div class="brand"><span id="s2cli">NotaFácil</span><a onclick="go('s1')">‹ voltar</a></div><h2>Qual serviço?</h2><div class="prog"><i class="on"></i><i class="on"></i><i></i></div></div><div class="c">
+<button class="chip" id="chip" onclick="escolherServ(0,true)">✨ Sugestão: Consultoria – igual ao mês passado</button>
+<div id="servs"></div><button class="btn" id="bCont" onclick="go('s3')" disabled>Continuar</button></div></section>
+
+<section class="scr" id="s3"><div class="top"><div class="brand"><span>NotaFácil</span><a onclick="go('s2')">‹ voltar</a></div><h2>Confirmar</h2><div class="prog"><i class="on"></i><i class="on"></i><i class="on"></i></div></div><div class="c">
+<div class="line"><span>Cliente</span><b id="cCli"></b></div><div class="line"><span>Serviço</span><b id="cServ"></b></div>
+<div class="lbl">Valor (toque para editar)</div><div class="val"><span>R$</span><input id="valor" inputmode="decimal" oninput="calc()"></div>
+<div class="line"><span id="issLbl">ISS</span><b id="iss"></b></div><div class="line"><span>Valor líquido</span><b id="liq"></b></div>
+<div class="tg" id="tgEmail" onclick="toggle()">Enviar por email com Pix<div class="sw on" id="sw"></div></div>
+<p class="hint" id="emailHint"></p>
+<button class="btn green" id="bEmitir" onclick="emitir()">✓ Emitir nota</button></div></section>
+
+<section class="scr" id="sVoz"><div class="top dark"><div class="brand"><span>NotaFácil</span><a onclick="pararVoz();go('s1')">✕ cancelar</a></div><h2>Falar nota</h2></div><div class="c">
+<div class="rec"><button class="bigmic" id="mic" onclick="ouvir()">🎙️</button><small id="micSt">Toque e diga, ex.: “nota de 2 mil pra Empresa Exemplo, consultoria”</small></div>
+<div class="tr" id="trans">…</div><button class="btn ghost" id="bSimular" onclick="processar('Emite nota de dois mil reais pra Empresa Exemplo, consultoria')">▶ Simular áudio</button>
+<div id="rasc" style="display:none"><div class="lbl">Rascunho preenchido pela IA</div><div class="draft">
+<div class="line"><span>Cliente <i class="ai">IA</i></span><b id="vCli"></b></div><div class="line"><span>Serviço <i class="ai">IA</i></span><b id="vServ"></b></div><div class="line" style="border:0"><span>Valor <i class="ai">IA</i></span><b id="vVal"></b></div></div>
+<button class="btn" id="bRev" onclick="go('s3')">Revisar</button><button class="btn green" id="bEmitirVoz" onclick="emitir()">✓ Emitir nota</button></div></div></section>
+
+<section class="scr" id="s4"><div class="top ok"><div class="brand">NotaFácil</div><h2>Nota emitida!</h2></div><div class="c">
+<div class="okic">✅</div><div class="num">NFS-e (fictícia) nº<b id="nNum"></b></div>
+<div class="draft" style="margin-top:16px"><div class="line"><span>Cliente</span><b id="nCli"></b></div><div class="line"><span>Serviço</span><b id="nServ"></b></div><div class="line" style="border:0"><span>Valor</span><b id="nVal"></b></div></div>
+<p class="hint" id="nEnvio" style="text-align:center;margin-top:12px"></p>
+<button class="btn" id="bNova" onclick="nova()">+ Nova nota</button></div></section>
+</div><script>
+const cores=['#4f46e5','#0891b2','#db2777','#ea580c','#7c3aed'];
+let clientes=[{n:'Empresa Exemplo Ltda',c:'00.000.000/0001-00',e:'financeiro@exemplo.com.br',u:'última: há 30 dias'},{n:'Comércio Fictício ME',c:'11.111.111/0001-11',e:'contato@ficticio.com.br',u:'última: há 2 meses'},{n:'Modelo Serviços S.A.',c:'22.222.222/0001-22',e:'nf@modelo.com.br',u:'última: há 3 meses'}];
+const servs=[{n:'Consultoria empresarial',d:'Consultoria em gestão e processos',cod:'17.01',iss:5},{n:'Suporte técnico mensal',d:'Suporte e manutenção de sistemas',cod:'01.07',iss:3},{n:'Treinamento',d:'Treinamento de equipes',cod:'08.02',iss:2}];
+const ultima={cli:0,serv:0,valor:2000};
+let st={cli:null,serv:null,valor:2000,email:true},num=1041;
+const brl=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const ini=n=>n.split(' ').slice(0,2).map(x=>x[0]).join('').toUpperCase();
+function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('act',s.id==id));if(id=='s2')renderServs();if(id=='s3')renderConf();scrollTo(0,0)}
+function renderClientes(){const q=busca.value.toLowerCase().replace(/\D/g,'')||busca.value.toLowerCase();lista.innerHTML=clientes.map((c,i)=>({c,i})).filter(({c})=>!busca.value||c.n.toLowerCase().includes(busca.value.toLowerCase())||c.c.replace(/\D/g,'').includes(q)).map(({c,i})=>`<div class="cl" data-i="${i}" onclick="selCli(${i})"><div class="av" style="background:${cores[i%5]}">${ini(c.n)}</div><div><b>${c.n}</b><small>${c.c} · ${c.u}</small></div></div>`).join('')||'<p class="hint">Nenhum cliente. Use “+ Novo cliente”.</p>'}
+function selCli(i){st.cli=i;st.serv=null;s2cli.textContent=clientes[i].n;go('s2')}
+function renderServs(){chip.style.display=st.cli===0?'inline-block':'none';servs_el=document.getElementById('servs');servs_el.innerHTML=servs.map((s,i)=>`<div class="svc ${st.serv===i?'sel':''}" data-i="${i}" onclick="escolherServ(${i})"><b>${s.n}</b><p>${s.d}</p><div class="tags"><span>Cód. ${s.cod}</span><span>ISS ${s.iss}%</span></div></div>`).join('');bCont.disabled=st.serv===null}
+function escolherServ(i,sug){st.serv=i;if(sug&&st.cli===ultima.cli)st.valor=ultima.valor;renderServs()}
+function renderConf(){const c=clientes[st.cli],s=servs[st.serv];cCli.textContent=c.n;cServ.textContent=s.n.split(' ')[0]+' · '+s.cod;valor.value=st.valor.toLocaleString('pt-BR',{minimumFractionDigits:2});calc();upEmail()}
+function parseV(t){return parseFloat(t.replace(/\./g,'').replace(',','.'))||0}
+function calc(){st.valor=parseV(valor.value);const s=servs[st.serv],i=st.valor*s.iss/100;issLbl.textContent=`ISS (${s.iss}%)`;iss.textContent=brl(i);liq.textContent=brl(st.valor-i);bEmitir.disabled=st.valor<=0}
+function toggle(){st.email=!st.email;upEmail()}
+function upEmail(){sw.classList.toggle('on',st.email);emailHint.textContent=st.email?'Será enviada para '+clientes[st.cli].e+' com QR Code Pix.':'A nota não será enviada por email.'}
+function repetir(){st={...st,cli:ultima.cli,serv:ultima.serv,valor:ultima.valor};go('s3')}
+function emitir(){if(!(st.valor>0))return;num++;const c=clientes[st.cli],s=servs[st.serv];nNum.textContent=String(num).padStart(6,'0');nCli.textContent=c.n;nServ.textContent=s.n;nVal.textContent=brl(st.valor);nEnvio.textContent=st.email?'📧 Nota emitida e enviada para '+c.e+' com Pix':'Nota emitida (sem envio por email)';Object.assign(ultima,{cli:st.cli,serv:st.serv,valor:st.valor});c.u='última: agora';go('s4')}
+function nova(){st={cli:null,serv:null,valor:2000,email:true};busca.value='';renderClientes();go('s1')}
+function mascara(el){let d=el.value.replace(/\D/g,'').slice(0,14);el.value=d.replace(/^(\d{2})(\d)/,'$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3').replace(/\.(\d{3})(\d)/,'.$1/$2').replace(/(\d{4})(\d)/,'$1-$2')}
+const fakes=['Alfa Exemplo Comércio Ltda','Beta Fictícia Serviços ME','Gama Modelo Tecnologia Ltda','Delta Teste Consultoria EIRELI'];
+function buscarCnpj(){const d=cnpj.value.replace(/\D/g,'');if(d.length!=14){achado.innerHTML='<p class="hint err">Digite os 14 números do CNPJ.</p>';return}
+const n=fakes[parseInt(d.slice(-4))%fakes.length];clientes.push({n,c:cnpj.value,e:'contato@'+n.split(' ')[0].toLowerCase()+'.exemplo',u:'novo'});cnpj.value='';achado.innerHTML='';renderClientes();selCli(clientes.length-1)}
+// Voz
+const nums={um:1,uma:1,dois:2,duas:2,'três':3,tres:3,quatro:4,cinco:5,seis:6,sete:7,oito:8,nove:9,dez:10,vinte:20,trinta:30,quarenta:40,cinquenta:50,cem:100,duzentos:200,trezentos:300,quinhentos:500};
+function valorDe(t){t=t.toLowerCase();let m=t.match(/(\d+(?:[.,]\d+)?)\s*(mil)?/);if(m){let v=parseFloat(m[1].replace(/\.(?=\d{3})/g,'').replace(',','.'));if(m[2])v*=1000;return v}
+m=t.match(/(\w+)\s+mil/);if(m&&nums[m[1]])return nums[m[1]]*1000;if(/\bmil\b/.test(t))return 1000;m=t.match(/\b(\w+)\s+reais/);if(m&&nums[m[1]])return nums[m[1]];return null}
+function norm(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
+function processar(t){trans.textContent='“'+t+'”';const n=norm(t);let ci=clientes.findIndex(c=>n.includes(norm(c.n.split(' ').slice(0,2).join(' '))));if(ci<0)ci=clientes.findIndex(c=>n.includes(norm(c.n.split(' ')[0])));
+let si=servs.findIndex(s=>n.includes(norm(s.n.split(' ')[0]).slice(0,6)));if(si<0&&/suporte|manuten/.test(n))si=1;const v=valorDe(t);
+st.cli=ci<0?ultima.cli:ci;st.serv=si<0?ultima.serv:si;st.valor=v||ultima.valor;
+vCli.textContent=clientes[st.cli].n+(ci<0?' (não entendi, usei o último)':'');vServ.textContent=servs[st.serv].n+(si<0?' (último)':'');vVal.textContent=brl(st.valor)+(v?'':' (último)');rasc.style.display='block'}
+let rec=null;function ouvir(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){micSt.textContent='Reconhecimento de voz indisponível neste navegador. Use “Simular áudio”.';return}
+rec=new SR();rec.lang='pt-BR';rec.interimResults=true;mic.classList.add('live');micSt.textContent='Ouvindo… fale agora';
+rec.onresult=e=>{const t=[...e.results].map(r=>r[0].transcript).join(' ');trans.textContent='“'+t+'”';if(e.results[e.results.length-1].isFinal)processar(t)};
+rec.onerror=e=>{micSt.textContent='Erro no microfone ('+e.error+'). Use “Simular áudio”.'};rec.onend=()=>{mic.classList.remove('live');if(micSt.textContent.startsWith('Ouvindo'))micSt.textContent='Toque para falar de novo'};rec.start()}
+function pararVoz(){try{rec&&rec.stop()}catch(e){}}
+renderClientes();
+</script></body></html>
