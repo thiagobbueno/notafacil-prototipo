@@ -9,6 +9,7 @@
     "dev": "NODE_OPTIONS='--experimental-sqlite' tsx watch src/server/index.ts",
     "start": "NODE_ENV=production NODE_OPTIONS='--experimental-sqlite' tsx src/server/index.ts",
     "build": "vite build",
+    "build:pages": "VITE_PAGES=1 vite build --mode pages",
     "test": "NODE_OPTIONS='--experimental-sqlite' vitest run",
     "typecheck": "tsc --noEmit"
   },

@@ -164,6 +164,6 @@ describe("caminhos de emissão em Goiás", () => {
       caminho: "emissor_nacional",
       status: "autorizado",
     }));
-    expect(pdf.subarray(0, 5).toString()).toBe("%PDF-");
+    expect(new TextDecoder().decode(pdf.subarray(0, 5))).toBe("%PDF-");
   });
 });

@@ -2,7 +2,7 @@ import { randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { linhasPdf, pdfDemonstracao, xmlDemonstracao } from "../domain/documento.js";
+import { bytesParaBase64, linhasPdf, pdfDemonstracao, xmlDemonstracao } from "../domain/documento.js";
 import { codigoNacionalIss, gerarCnpj } from "../domain/format.js";
 
 export type Usuario = { id: string; nome: string; email: string; senha_hash: string };
@@ -304,7 +304,8 @@ function semear(db: DatabaseSync) {
     valor: 2000,
     caminho: "emissor_nacional",
     status: "autorizado",
-  })).toString("base64");
+  }));
+  const pdfDemo64 = bytesParaBase64(pdfDemo);
   db.prepare(`INSERT INTO notas (
     id, empresa_id, tomador_id, servico_id, ref, caminho, status, valor, aliquota_iss, valor_iss, iss_retido,
     descricao, enviar_email, numero, codigo_verificacao, url_consulta, url_pdf, caminho_xml, xml_local, pdf_base64,
@@ -313,7 +314,7 @@ function semear(db: DatabaseSync) {
     'nota-demo', 'emp-simples', ?, ?, 'nfdemo000001', 'emissor_nacional', 'autorizado', 2000, ?, 100, 0,
     ?, 1, '0001042', 'DEMO1042', NULL, NULL, NULL, ?, ?,
     NULL, ?, ?, ?
-  )`).run(tomador.id, servico.id, servico.aliquota_iss, servico.descricao, xmlDemo, pdfDemo, JSON.stringify({ demonstracao: true, codigo_tributacao_nacional_iss: servico.codigo_nacional }), ontem, ontem);
+  )`).run(tomador.id, servico.id, servico.aliquota_iss, servico.descricao, xmlDemo, pdfDemo64, JSON.stringify({ demonstracao: true, codigo_tributacao_nacional_iss: servico.codigo_nacional }), ontem, ontem);
   db.prepare("UPDATE tomadores SET ultima_nota_em = ? WHERE id = ?").run(ontem, tomador.id);
 }
 

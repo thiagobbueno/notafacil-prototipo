@@ -64,7 +64,8 @@ textarea { min-height: 78px; resize: vertical; }
 .num b { display: block; font-size: 22px; color: #0f172a; margin-top: 4px; }
 .hint { margin-top: 6px; line-height: 1.4; }
 .err { color: #dc2626; }
-.nav { display: flex; border-top: 1px solid #e2e8f0; background: #fff; position: sticky; bottom: 0; }
+.nav { display: flex; border-top: 1px solid #e2e8f0; background: #fff; position: sticky; bottom: 0; padding-bottom: env(safe-area-inset-bottom); }
+.banner { padding-top: calc(6px + env(safe-area-inset-top)); }
 .nav button { flex: 1; border: none; background: none; padding: 10px 4px 14px; font-size: 12px; font-weight: 700; color: #64748b; cursor: pointer; }
 .nav button.on { color: #4f46e5; }
 .badge { font-size: 11px; font-weight: 700; border-radius: 999px; padding: 4px 8px; }

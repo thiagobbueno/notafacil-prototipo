@@ -10,3 +10,5 @@ npm run dev
 ```
 
 http://localhost:3000 · `contador@notafacil.local` · senha `notafacil`
+
+Demonstração no celular, sem servidor: https://thiagobbueno.github.io/notafacil-prototipo/app/ (`npm run build:pages` gera a pasta `app/`).

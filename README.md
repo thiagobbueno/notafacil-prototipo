@@ -2,7 +2,7 @@
 
 Aplicativo para o escritório contábil emitir NFS-e de clientes em Goiás em poucos toques, com um atalho por voz. A interface é em português (pt-BR) e pensada para o celular.
 
-O arquivo `index.html` na raiz continua sendo o **protótipo clicável** publicado no GitHub Pages. Ele não emite nota. O aplicativo de verdade está na pasta `notafacil/`.
+O arquivo `index.html` na raiz continua sendo o **protótipo clicável** publicado no GitHub Pages. Ele não emite nota. O aplicativo de verdade está na pasta `notafacil/`. A pasta `app/` é uma cópia estática só para demonstração no celular.
 
 ## O que o aplicativo faz
 
@@ -58,6 +58,23 @@ O escritório de exemplo já traz três empresas:
 
 Para falar uma nota de teste, toque em **Falar nota** e em **Simular áudio**, ou diga: “nota de 1500 reais para Construtora X, limpeza pós-obra”. Revise a tela de confirmação e só então emita.
 
+### Demonstração no celular (GitHub Pages)
+
+Não precisa de servidor nem de token da Focus. A versão em `app/` guarda empresas, tomadores e notas no `localStorage` do aparelho. Nada sai para a Focus.
+
+https://thiagobbueno.github.io/notafacil-prototipo/app/
+
+O mesmo login de demonstração vale: `contador@notafacil.local` / `notafacil`.
+
+O protótipo clicável continua na raiz do site: https://thiagobbueno.github.io/notafacil-prototipo/
+
+Para gerar de novo a pasta `app/` (o GitHub Pages publica o que está no branch `main`):
+
+```bash
+cd notafacil
+npm run build:pages
+```
+
 ### Token de homologação
 
 No [painel da Focus](https://focusnfe.com.br), copie o **token de homologação** (não o de produção) e coloque em `notafacil/.env`:
@@ -100,7 +117,7 @@ Defina `FOCUS_WEBHOOK_SECRET` e cadastre o mesmo valor no gatilho `nfsen` (e `nf
 
 Em produção fechada, use `NOTAFACIL_REGISTRO=fechado` para ninguém criar outra conta. Troque a senha do usuário de demonstração.
 
-O GitHub Pages continua servindo só o `index.html` da raiz. O aplicativo não é página estática.
+O GitHub Pages publica o `index.html` da raiz (protótipo) e a pasta `app/` (demonstração sem servidor). A emissão de verdade continua precisando do processo Node.
 
 ## Para valer de verdade (produção)
 

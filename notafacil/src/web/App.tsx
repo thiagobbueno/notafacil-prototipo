@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { api, ApiError } from "./api";
+import { api, ApiError, baixarNota } from "./api";
 import { LABEL_REGIME, resolverCaminho, type Regime } from "../domain/emissao";
 import {
   calcularIss,
@@ -102,7 +102,7 @@ type Tela =
   | { nome: "servicos" }
   | { nome: "servicoForm"; id?: string };
 
-type Meta = { modo: Modo; registroAberto: boolean; municipios: MunicipioGo[]; empresasApi: boolean };
+type Meta = { modo: Modo; registroAberto: boolean; municipios: MunicipioGo[]; empresasApi: boolean; estatico?: boolean };
 
 const CORES = ["#4f46e5", "#0891b2", "#db2777", "#ea580c", "#7c3aed"];
 const STATUS: Record<string, string> = {
@@ -248,9 +248,11 @@ export function App() {
   }
 
   const mostraNav = tela.nome === "inicio" || tela.nome === "notas" || tela.nome === "escritorio" || tela.nome === "servicos";
-  const banner = meta?.modo === "homologacao"
-    ? "HOMOLOGAÇÃO Focus NFe · a nota de teste não tem valor fiscal"
-    : "DEMONSTRAÇÃO · sem token Focus · nenhuma nota real é emitida";
+  const banner = meta?.estatico
+    ? "DEMONSTRAÇÃO NO CELULAR · os dados ficam neste aparelho · nenhuma nota real é emitida"
+    : meta?.modo === "homologacao"
+      ? "HOMOLOGAÇÃO Focus NFe · a nota de teste não tem valor fiscal"
+      : "DEMONSTRAÇÃO · sem token Focus · nenhuma nota real é emitida";
 
   return (
     <div className="app">
@@ -803,6 +805,15 @@ function NotaDetalhe({ id, onVoltar, onMudou }: { id: string; onVoltar: () => vo
     return () => { ativo = false; clearInterval(timer); };
   }, [id]);
 
+  async function baixar(tipo: "pdf" | "xml") {
+    setErro("");
+    try {
+      await baixarNota(id, tipo);
+    } catch (falha) {
+      setErro(falha instanceof ApiError ? falha.message : "Não foi possível baixar o arquivo.");
+    }
+  }
+
   async function cancelar() {
     setOcupado(true);
     setErro("");
@@ -834,8 +845,8 @@ function NotaDetalhe({ id, onVoltar, onMudou }: { id: string; onVoltar: () => vo
         {nota.codigoVerificacao && <p className="hint">Código de verificação: {nota.codigoVerificacao}</p>}
         {textoErro(nota.erros) && <p className="hint err">{textoErro(nota.erros)}</p>}
         {nota.urlConsulta && <a className="btn ghost" href={nota.urlConsulta} target="_blank" rel="noreferrer">Consultar no portal</a>}
-        {nota.temPdf && <a className="btn" href={`/api/notas/${nota.id}/pdf`} target="_blank" rel="noreferrer">Baixar PDF</a>}
-        {nota.temXml && <a className="btn ghost" href={`/api/notas/${nota.id}/xml`}>Baixar XML</a>}
+        {nota.temPdf && <button className="btn" type="button" onClick={() => baixar("pdf")}>Baixar PDF</button>}
+        {nota.temXml && <button className="btn ghost" type="button" onClick={() => baixar("xml")}>Baixar XML</button>}
         {nota.status === "autorizado" && (
           <>
             <div className="lbl">Cancelar nota</div>

@@ -3,7 +3,7 @@ import { randomBytes, randomUUID } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { linhasPdf, pdfDemonstracao, xmlDemonstracao } from "../domain/documento.js";
+import { bytesParaBase64, linhasPdf, pdfDemonstracao, xmlDemonstracao } from "../domain/documento.js";
 import {
   LABEL_REGIME,
   flagsEmpresaFocus,
@@ -842,7 +842,7 @@ export async function createApp(opcoes: AppOptions) {
     }));
     const agora = new Date().toISOString();
     db.prepare(`UPDATE notas SET status='autorizado', numero=?, codigo_verificacao=?, xml_local=?, pdf_base64=?, atualizado_em=? WHERE id=?`).run(
-      numero, codigo, xml, pdf.toString("base64"), agora, id,
+      numero, codigo, xml, bytesParaBase64(pdf), agora, id,
     );
     db.prepare("UPDATE tomadores SET ultima_nota_em = ? WHERE id = ?").run(agora, tomador.id);
   }
